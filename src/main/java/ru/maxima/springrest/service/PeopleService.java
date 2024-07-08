@@ -63,14 +63,20 @@ public class PeopleService {
     }
 
     @Transactional
-    public void update(Person person, Integer id) {
-        person.setId(Long.valueOf(id));
-        repository.save(person);
+    public void update(PersonDTO personDTO, Long id) {
+        Person toBeUpdated = findById(id);
+        Person updates = convertFromDTOToPerson(personDTO);
+        toBeUpdated.setName(updates.getName());
+        toBeUpdated.setAge(updates.getAge());
+        toBeUpdated.setEmail(updates.getEmail());
+        repository.save(toBeUpdated);
     }
 
     @Transactional
-    public void delete(Integer id) {
-        repository.deleteById(Long.valueOf(id));
+    public void delete(Long id) {
+        Person byId= findById(id);
+        byId.setRemoved(true);
+        repository.save(byId);
     }
 
     @Transactional
