@@ -30,7 +30,7 @@ public class PeopleService {
     }
 
     @Transactional
-    public List<Person> getAllPeople() {
+    public List<Person> getAllPeople(Boolean isRemoved) {
 
         String token = jwtUtil.generateToken("Viktor");
 
@@ -38,7 +38,7 @@ public class PeopleService {
 
         System.out.println(username);
 
-        List<Person> people = repository.findAll();
+        List<Person> people = repository.findAllByRemoved(isRemoved);
 
 
         test();
@@ -63,14 +63,20 @@ public class PeopleService {
     }
 
     @Transactional
-    public void update(Person person, Integer id) {
-        person.setId(Long.valueOf(id));
-        repository.save(person);
+    public void update(PersonDTO personDTO, Long id) {
+        Person toBeUpdated = findById(id);
+        Person updates = convertFromDTOToPerson(personDTO);
+        toBeUpdated.setName(updates.getName());
+        toBeUpdated.setAge(updates.getAge());
+        toBeUpdated.setEmail(updates.getEmail());
+        repository.save(toBeUpdated);
     }
 
     @Transactional
-    public void delete(Integer id) {
-        repository.deleteById(Long.valueOf(id));
+    public void delete(Long id) {
+        Person byId= findById(id);
+        byId.setRemoved(true);
+        repository.save(byId);
     }
 
     @Transactional
