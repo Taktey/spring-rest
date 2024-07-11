@@ -15,6 +15,7 @@ public interface PeopleRepository extends JpaRepository<Person, Long> {
 
     Optional<Person> findByName(String name);
     List<Person> findPeopleByNameLike(String like);
+    List<Person> findAllByRemoved(Boolean isRemoved);
 
     Person findByEmail(String email);
 

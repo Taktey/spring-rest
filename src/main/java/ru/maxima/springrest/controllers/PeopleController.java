@@ -41,8 +41,7 @@ public class PeopleController {
 
     @GetMapping()
     public List<PersonDTO> getAllPeople() {
-        return peopleService.getAllPeople().stream()
-                .filter(p -> !p.getRemoved())
+        return peopleService.getAllPeople(false).stream()
                 .map(p -> modelMapper.map(p, PersonDTO.class))
                 .toList();
     }
@@ -54,8 +53,7 @@ public class PeopleController {
 
     @GetMapping("/deleted")
     public List<PersonDTO> getAllRemovedPeople() {
-        return peopleService.getAllPeople().stream()
-                .filter(Person::getRemoved)
+        return peopleService.getAllPeople(true).stream()
                 .map(p -> modelMapper.map(p, PersonDTO.class))
                 .toList();
     }
@@ -90,7 +88,6 @@ public class PeopleController {
             throw new PersonNotCreatedException(stringBuilder.toString());
         }
     }
-
 
     @PostMapping()
     public ResponseEntity<HttpStatus> savePerson(@RequestBody @Valid PersonDTO personDTO,

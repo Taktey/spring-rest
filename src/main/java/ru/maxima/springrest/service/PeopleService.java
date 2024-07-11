@@ -30,7 +30,7 @@ public class PeopleService {
     }
 
     @Transactional
-    public List<Person> getAllPeople() {
+    public List<Person> getAllPeople(Boolean isRemoved) {
 
         String token = jwtUtil.generateToken("Viktor");
 
@@ -38,7 +38,7 @@ public class PeopleService {
 
         System.out.println(username);
 
-        List<Person> people = repository.findAll();
+        List<Person> people = repository.findAllByRemoved(isRemoved);
 
 
         test();
